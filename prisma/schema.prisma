@@ -44,7 +44,39 @@ model Log {
   user      User?     @relation(fields: [userId], references: [id])
 }
 
+model NewsletterSubscriber {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  status    SubscriptionStatus @default(SUBSCRIBED)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Newsletter {
+  id        String   @id @default(uuid())
+  subject   String
+  content   String
+  status    NewsletterStatus @default(DRAFT)
+  sentAt    DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 enum Role {
   SUPER_ADMIN
   ADMIN
+}
+
+enum SubscriptionStatus {
+  SUBSCRIBED
+  UNSUBSCRIBED
+  BOUNCED
+}
+
+enum NewsletterStatus {
+  DRAFT
+  SCHEDULED
+  SENT
+  FAILED
 }
