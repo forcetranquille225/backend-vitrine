@@ -18,7 +18,7 @@ export class BrevoService {
   private readonly personalName: string = 'Newsletter';
 
   constructor(private configService: ConfigService) {
-    this.apiKey = this.configService.get<string>('BREVO_API_KEY');
+    this.apiKey = this.configService.get<string>('BREVO_API_KEY') || '';
     this.personalEmail = this.configService.get<string>('PERSONAL_EMAIL') || '';
 
     if (!this.apiKey) {

@@ -5,10 +5,11 @@ import { ConfigModule } from '@nestjs/config';
 import { PrismaService } from './prisma.service';
 import { AuthModule } from './auth/auth.module';
 import { NewsletterModule } from './newsletter/newsletter.module';
+import { ContactModule } from './contact/contact.module';
 
 
 @Module({
-  imports: [AuthModule, NewsletterModule, ConfigModule.forRoot({
+  imports: [AuthModule, NewsletterModule, ContactModule, ConfigModule.forRoot({
       isGlobal: true,
     }),],
   controllers: [AppController],

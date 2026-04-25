@@ -86,7 +86,8 @@ export class NewsletterService {
    * Get all subscribers
    */
   async getAllSubscribers(status?: string) {
-    const where = status ? { status } : { status: 'SUBSCRIBED' };
+    const statusEnum = (status || 'SUBSCRIBED') as any;
+    const where = { status: statusEnum };
 
     return await this.prisma.newsletterSubscriber.findMany({
       where,

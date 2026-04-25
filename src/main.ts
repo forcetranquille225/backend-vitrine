@@ -8,6 +8,12 @@ import * as csurf from 'csurf';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // CORS
+  app.enableCors({
+    origin: ['http://localhost:4200', 'http://localhost:3000'],
+    credentials: true,
+  });
+
   // Sécurité HTTP
   app.use(helmet());
 
@@ -25,16 +31,22 @@ async function bootstrap() {
   // Cookies requis pour CSRF
   app.use(cookieParser());
 
-  // Protection CSRF via cookies
-  app.use(
-    csurf({
+  // Protection CSRF via cookies (sauf pour endpoints publics)
+  app.use((req, res, next) => {
+    // Ignorer CSRF pour le formulaire de contact public
+    if (req.path === '/api/contact' && req.method === 'POST') {
+      return next();
+    }
+    
+    // Appliquer CSRF pour les autres endpoints
+    return csurf({
       cookie: {
         httpOnly: true,
         sameSite: 'strict',
-        secure: false, // true en production HTTPS
+        secure: false,
       },
-    }),
-  );
+    })(req, res, next);
+  });
 
   await app.listen(process.env.PORT ?? 3000);
 }
